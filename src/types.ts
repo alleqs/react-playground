@@ -16,3 +16,11 @@ export type ApOpPropria = {
    saldoCredorProxPer: number
    recExtraAp: number
 }
+
+export type InfoContrib = {
+   nome: string
+   cnpj: string
+   IE: string
+   perEscrit: string
+   perAp: string
+}

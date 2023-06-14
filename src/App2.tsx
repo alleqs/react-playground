@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useRef } from 'react'
-import type { ApOpPropria } from './types';
-import { Page, Text, View, Document, StyleSheet, pdf, PDFViewer } from '@react-pdf/renderer';
+import React, { FC, useEffect, useRef } from 'react';
+import type { ApOpPropria, InfoContrib } from './types';
+import { Page, Text, View, Document, StyleSheet, Font, pdf, PDFViewer } from '@react-pdf/renderer';
 
 const json = `
 {
@@ -19,26 +19,100 @@ const json = `
    "deducoes": 0,
    "icmsARec": 100808.92,
    "saldoCredorProxPer": 0,
-   "recExtraAp": 0
+   "recExtraAp": 0,
+   "nome": "Sociedade Fogás Ltda.",
+   "cnpj": "04.563.672/0001-66",
+   "IE": "04.103.434-1",
+   "perEscrit": "01/03/2023 a 31/03/2023",
+   "perAp": "01/03/2023 a 31/03/2023"
 }
 `;
 
-const apuracao: ApOpPropria = JSON.parse(json);
+const apuracao: ApOpPropria & InfoContrib = JSON.parse(json);
 
 const styles = StyleSheet.create({
 
    page: {
       flexDirection: 'column',
+      marginTop: 30,
    },
    headerContainer: {
-      margin: 10,
-      padding: 10,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginVertical: 10,
+
    },
-   header: {
+   header1: {
+      fontFamily: 'Helvetica',
       fontSize: 12,
-      fontWeight: 'bold',
-      textAlign: 'center',
-   }
+   },
+   header2: {
+      fontFamily: 'Helvetica-Oblique',
+      fontSize: 12,
+   },
+
+   line: {
+      marginHorizontal: 30,
+      borderTop: '1px solid #EEE',
+   },
+
+   dadoContribContainer: {
+      marginBottom: 10,
+      paddingHorizontal: 10,
+   },
+   dadoContribLinha: {
+      flexDirection: 'row',
+      marginHorizontal: 30,
+      marginTop: 10
+   },
+   dadoContribChave: {
+      fontSize: 11,
+      fontFamily: 'Helvetica-Bold'
+      // fontWeight: 'extrabold',
+      // textAlign: 'center',
+   },
+   dadoContribValor: {
+      fontSize: 11,
+   },
+   dadoContribInscrContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+   },
+
+   headerTitle: {
+      flexDirection: 'row',
+   },
+   tableContainer: {
+      marginTop: 10
+   },
+   descrição: {
+      fontSize: 11,
+      width: '50%',
+      backgroundColor: '#eee',
+      textAlign: 'left',
+      paddingVertical: 3,
+      paddingLeft: 30
+   },
+   valor: {
+      fontSize: 11,
+      width: '50%',
+      backgroundColor: '#eee',
+      textAlign: 'right',
+      paddingVertical: 3,
+      paddingRight: 30
+   },
+   itemContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginHorizontal: 30
+   },
+   item: {
+      fontSize: 10,
+      // marginHorizontal: 30,
+      marginTop: 3,
+      paddingVertical: 3,
+      paddingHorizontal: 10
+   },
 
 });
 
@@ -58,14 +132,119 @@ export const App2: FC<Props> = ({ }) => {
    //    })();
    // }, []);
 
+   // dadoContribLinha: {
+   //    flexDirection: 'row',
+   //    marginHorizontal: 30,
+   //    // marginTop: 10,
+   //    borderTop: '1px solid #EEE',
+   //    paddingVertical: 10,
+   // },
+
    return (
       <div>
          <PDFViewer width="1000" height="1000">
             <Document>
                <Page size="A4" style={styles.page}>
+                  <View style={styles.line} />
                   <View style={styles.headerContainer}>
-                     <Text style={styles.header}>REGISTROS FISCAIS DA APURAÇÃO DO ICMS - OPERAÇÕES PRÓPRIAS</Text>
+                     <Text style={styles.header1}>REGISTROS FISCAIS DA APURAÇÃO DO ICMS </Text>
+                     <Text style={{ ...styles.header2 }}>- OPERAÇÕES PRÓPRIAS</Text>
                   </View>
+                  <View style={styles.line} />
+                  <View style={styles.dadoContribContainer}>
+                     <View style={styles.dadoContribLinha}>
+                        <Text style={styles.dadoContribChave}>CONTRIBUINTE: </Text>
+                        <Text style={styles.dadoContribValor}>{apuracao.nome}</Text>
+                     </View>
+                     <View style={styles.dadoContribInscrContainer}>
+                        <View style={styles.dadoContribLinha}>
+                           <Text style={styles.dadoContribChave}>CNPJ/CPF: </Text>
+                           <Text style={styles.dadoContribValor}>{apuracao.cnpj}</Text>
+                        </View>
+                        <View style={styles.dadoContribLinha}>
+                           <Text style={styles.dadoContribChave}>INSCRIÇÃO ESTADUAL: </Text>
+                           <Text style={styles.dadoContribValor}>{apuracao.IE}</Text>
+                        </View>
+                     </View>
+                     <View style={styles.dadoContribLinha}>
+                        <Text style={styles.dadoContribChave}>PERÍODO DA ESCRITURAÇÃO: </Text>
+                        <Text style={styles.dadoContribValor}>{apuracao.perEscrit}</Text>
+                     </View>
+                     <View style={styles.dadoContribLinha}>
+                        <Text style={styles.dadoContribChave}>PERÍODO DA APURAÇÃO: </Text>
+                        <Text style={styles.dadoContribValor}>{apuracao.perAp}</Text>
+                     </View>
+                  </View>
+                  {/* <View style={styles.line} /> */}
+                  <View style={styles.tableContainer}>
+                     <View style={styles.itemContainer}>
+                        <Text style={styles.descrição}>Descrição</Text>
+                        <Text style={styles.valor}>Valor (R$)</Text>
+                     </View>
+                     {/* {Object.entries(apuracao).map(([key, val], i) =>
+                        <View key={i} style={{ ...styles.itemContainer, ...(i % 2 === 1) && { backgroundColor: '#f5f5f5' } }}>
+                           <Text style={styles.item}>{key}</Text>
+                           <Text style={styles.item}>{`${typeof val === 'number' ? formatNumber(val) : val}`}</Text>
+                        </View>
+                     )} */}
+                     <View style={{ ...styles.itemContainer }}>
+                        <Text style={styles.item}>SAÍDAS E PRESTAÇÕES COM DÉBITO DO IMPOSTO</Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.saídas)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer, backgroundColor: '#f5f5f5' }}>
+                        <Text style={styles.item}>VALOR TOTAL DOS AJUSTES A DÉBITO (decorrentes do documento fiscal)</Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.ajDocFiscal)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer }}>
+                        <Text style={styles.item}>VALOR TOTAL DOS AJUSTES A DÉBITO DO IMPOSTO</Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.aj)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer, backgroundColor: '#f5f5f5' }}>
+                        <Text style={styles.item}>VALOR TOTAL DOS ESTORNOS DE CRÉDITOS </Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.estCred)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer }}>
+                        <Text style={styles.item}>VALOR TOTAL DOS CRÉDITOS POR ENTRADAS E AQUISIÇÕES COM CRÉDITO DO IMPOSTO</Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.credAq)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer, backgroundColor: '#f5f5f5' }}>
+                        <Text style={styles.item}>VALOR TOTAL DOS AJUSTES A CRÉDITO (decorrentes do documento fiscal) </Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.ajCredDocFiscal)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer }}>
+                        <Text style={styles.item}>VALOR TOTAL DOS AJUSTES A CRÉDITO DO IMPOSTO</Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.ajCred)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer, backgroundColor: '#f5f5f5' }}>
+                        <Text style={styles.item}>VALOR TOTAL DOS ESTORNOS DE DÉBITOS</Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.estDeb)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer }}>
+                        <Text style={styles.item}>VALOR TOTAL DO SALDO CREDOR DO PERÍODO ANTERIOR</Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.saldoAcc)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer, backgroundColor: '#f5f5f5' }}>
+                        <Text style={styles.item}>VALOR DO SALDO DEVEDOR</Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.saldoDev)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer }}>
+                        <Text style={styles.item}>VALOR TOTAL DAS DEDUÇÕES</Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.deducoes)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer, backgroundColor: '#f5f5f5' }}>
+                        <Text style={styles.item}>VALOR TOTAL DO ICMS A RECOLHER</Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.icmsARec)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer }}>
+                        <Text style={styles.item}>VALOR TOTAL DO SALDO CREDOR A TRANSPORTAR PARA O PERÍODO SEGUINTE </Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.saldoCredorProxPer)}</Text>
+                     </View>
+                     <View style={{ ...styles.itemContainer, backgroundColor: '#f5f5f5' }}>
+                        <Text style={styles.item}>VALORES RECOLHIDOS OU A RECOLHER, EXTRA-APURAÇÃO</Text>
+                        <Text style={styles.item}>{formatNumber(apuracao.recExtraAp)}</Text>
+                     </View>
+                  </View>
+
                </Page>
             </Document>
          </PDFViewer>
@@ -82,9 +261,14 @@ export const App2: FC<Props> = ({ }) => {
 const MyDocument = () => (
    <Document>
       <Page size="A4" style={styles.page}>
-         <View style={styles.header}>
+         <View style={styles.header1}>
             <Text>REGISTROS FISCAIS DA APURAÇÃO DO ICMS - OPERAÇÕES PRÓPRIAS</Text>
          </View>
       </Page>
    </Document>
 );
+
+
+function formatNumber(n: number) {
+   return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
