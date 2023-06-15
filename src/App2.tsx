@@ -87,19 +87,21 @@ const styles = StyleSheet.create({
    },
    descrição: {
       fontSize: 11,
+      fontFamily: 'Helvetica-Bold',
       width: '50%',
       backgroundColor: '#eee',
       textAlign: 'left',
       paddingVertical: 3,
-      paddingLeft: 30
+      paddingLeft: 160
    },
    valor: {
       fontSize: 11,
+      fontFamily: 'Helvetica-Bold',
       width: '50%',
       backgroundColor: '#eee',
       textAlign: 'right',
       paddingVertical: 3,
-      paddingRight: 30
+      paddingRight: 10
    },
    itemContainer: {
       flexDirection: 'row',
